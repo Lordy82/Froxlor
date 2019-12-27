@@ -466,6 +466,19 @@ return array(
 							'1'
 						)
 					),
+                    'isbinddnssec' => array(
+                        'label' => 'DNSSEC',
+                        'type' => 'checkbox',
+                        'values' => array(
+                            array(
+                                'label' => $lng['panel']['yes'],
+                                'value' => '1'
+                            )
+                        ),
+                        'value' => array(
+                            '1'
+                        )
+                    ),
 					'zonefile' => array(
 						'label' => 'Zonefile',
 						'desc' => $lng['admin']['bindzonewarning'],

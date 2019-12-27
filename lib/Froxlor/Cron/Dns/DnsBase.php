@@ -102,7 +102,8 @@ abstract class DnsBase
 				`d`.`dkim_pubkey`,
 				`d`.`ismainbutsubto`,
 				`c`.`loginname`,
-				`c`.`guid`
+				`c`.`guid`,
+			    `d`.isbinddnssec
 			FROM
 				`" . TABLE_PANEL_DOMAINS . "` `d`
 			LEFT JOIN `" . TABLE_PANEL_CUSTOMERS . "` `c` USING(`customerid`)

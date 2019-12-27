@@ -225,6 +225,8 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 	 *        	optional, whether to allow the customer to edit domain settings, default 0 (false)
 	 * @param bool $isbinddomain
 	 *        	optional, whether to generate a dns-zone or not (only of nameserver is activated), default 0 (false)
+     * * @param bool $isbinddnssec
+     *        	optional, whether do zone signing or not (only of nameserver is activated), default 0 (false)
 	 * @param string $zonefile
 	 *        	optional, custom dns zone filename (only of nameserver is activated), default empty (auto-generated)
 	 * @param bool $dkim
@@ -313,6 +315,7 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 				$termination_date = $this->getParam('termination_date', true, '');
 				$caneditdomain = $this->getBoolParam('caneditdomain', true, 0);
 				$isbinddomain = $this->getBoolParam('isbinddomain', true, 0);
+                $isbinddnssec = $this->getBoolParam('isbinddnssec', true, 0);
 				$zonefile = $this->getParam('zonefile', true, '');
 				$dkim = $this->getBoolParam('dkim', true, 0);
 				$specialsettings = $this->getParam('specialsettings', true, '');
@@ -726,7 +729,8 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 						'tlsv13_cipher_list' => $tlsv13_cipher_list,
 						'sslenabled' => $sslenabled,
 						'honorcipherorder' => $honorcipherorder,
-						'sessiontickets' => $sessiontickets
+						'sessiontickets' => $sessiontickets,
+                        'isbinddnssec' => $isbinddnssec
 					);
 
 					$ins_stmt = Database::prepare("
@@ -777,7 +781,8 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 						`tlsv13_cipher_list` = :tlsv13_cipher_list,
 						`ssl_enabled` = :sslenabled,
 						`ssl_honorcipherorder` = :honorcipherorder,
-						`ssl_sessiontickets`= :sessiontickets
+						`ssl_sessiontickets`= :sessiontickets,
+						`isbinddnssec` = :isbinddnssec
 					");
 					Database::pexecute($ins_stmt, $ins_data, true, true);
 					$domainid = Database::lastInsertId();
@@ -871,6 +876,8 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 	 *        	optional, whether to allow the customer to edit domain settings, default 0 (false)
 	 * @param bool $isbinddomain
 	 *        	optional, whether to generate a dns-zone or not (only of nameserver is activated), default 0 (false)
+     * * @param bool $isbinddnssec
+     *        	optional, whether zone signing or not (only of nameserver is activated), default 0 (false)
 	 * @param string $zonefile
 	 *        	optional, custom dns zone filename (only of nameserver is activated), default empty (auto-generated)
 	 * @param bool $dkim
@@ -965,6 +972,7 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 			$termination_date = $this->getParam('termination_date', true, $result['termination_date']);
 			$caneditdomain = $this->getBoolParam('caneditdomain', true, $result['caneditdomain']);
 			$isbinddomain = $this->getBoolParam('isbinddomain', true, $result['isbinddomain']);
+            $isbinddnssec = $this->getBoolParam('isbinddnssec', true, $result['isbinddnssec']);
 			$zonefile = $this->getParam('zonefile', true, $result['zonefile']);
 			$dkim = $this->getBoolParam('dkim', true, $result['dkim']);
 			$specialsettings = $this->getParam('specialsettings', true, $result['specialsettings']);
@@ -1576,6 +1584,7 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 			$update_data['honorcipherorder'] = $honorcipherorder;
 			$update_data['sessiontickets'] = $sessiontickets;
 			$update_data['id'] = $id;
+            $update_data['isbinddnssec'] = $isbinddnssec;
 
 			$update_stmt = Database::prepare("
 				UPDATE `" . TABLE_PANEL_DOMAINS . "` SET
@@ -1620,7 +1629,8 @@ class Domains extends \Froxlor\Api\ApiCommand implements \Froxlor\Api\ResourceEn
 				`tlsv13_cipher_list` = :tlsv13_cipher_list,
 				`ssl_enabled` = :sslenabled,
 				`ssl_honorcipherorder` = :honorcipherorder,
-				`ssl_sessiontickets` = :sessiontickets
+				`ssl_sessiontickets` = :sessiontickets,
+				`isbinddnssec`= :isbinddnssec
 				WHERE `id` = :id
 			");
 			Database::pexecute($update_stmt, $update_data, true, true);

@@ -530,6 +530,19 @@ return array(
 							$result['isbinddomain']
 						)
 					),
+                    'isbinddnssec' => array(
+                        'label' => 'DNSSEC',
+                        'type' => 'checkbox',
+                        'values' => array(
+                            array(
+                                'label' => $lng['panel']['yes'],
+                                'value' => '1'
+                            )
+                        ),
+                        'value' => array(
+                            $result['isbinddnssec']
+                        )
+                    ),
 					'zonefile' => array(
 						'label' => 'Zonefile',
 						'desc' => $lng['admin']['bindzonewarning'],
